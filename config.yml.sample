@@ -1,0 +1,15 @@
+# Information required to connect to MySQL database. This is passed directly
+# into Mysql2::Client so see its documentation for more details:
+# http://www.rubydoc.info/gems/mysql2/
+database_connection:
+  host: MYSQL_HOST
+  username: MYSQL_USERNAME
+  password: MYSQL_PASSWORD
+  port: MYSQL_PORT
+  database: MYSQL_DATABASE_NAME
+# General description of the blog's structure, including table and column names.
+blog_structure:
+  table_name: posts
+  title_column: title
+  body_column: body
+  created_at_column: created_at
