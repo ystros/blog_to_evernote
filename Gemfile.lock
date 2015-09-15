@@ -7,6 +7,7 @@ GEM
       oauth (>= 0.4.1)
     mysql2 (0.4.0)
     oauth (0.4.7)
+    rake (10.4.2)
 
 PLATFORMS
   ruby
@@ -14,6 +15,7 @@ PLATFORMS
 DEPENDENCIES
   evernote_oauth
   mysql2
+  rake
 
 BUNDLED WITH
    1.10.6
