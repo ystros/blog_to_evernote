@@ -7,6 +7,7 @@ database_connection:
   password: MYSQL_PASSWORD
   port: MYSQL_PORT
   database: MYSQL_DATABASE_NAME
+
 # General description of the blog's structure, including table and column names.
 blog_structure:
   table_name: posts
@@ -14,3 +15,20 @@ blog_structure:
   title_column: title
   body_column: body
   created_at_column: created_at
+
+# Evernote configuration.
+evernote:
+  # Your Evernote API key
+  key: EVERNOTE_KEY
+  # Your Evernote API secret
+  secret: EVERNOTE_SECRET
+  # Whether or not to import into the development sandbox (true) or a production
+  # account (false)
+  sandbox: false
+  # An OAuth token issued by Evernote. The app will prompt you to create one
+  # when you first run it. Take the token it returns you and save it in your
+  # config.
+  auth_token:
+  # A list of static tags that should be applied to the notes created.
+  tags:
+    - imported
