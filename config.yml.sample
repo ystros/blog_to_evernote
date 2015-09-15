@@ -10,6 +10,7 @@ database_connection:
 # General description of the blog's structure, including table and column names.
 blog_structure:
   table_name: posts
+  id_column: id
   title_column: title
   body_column: body
   created_at_column: created_at

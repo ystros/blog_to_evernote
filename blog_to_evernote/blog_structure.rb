@@ -6,6 +6,10 @@ module BlogToEvernote
       @config = config
     end
 
+    def id_column
+      @config["id_column"]
+    end
+
     def title_column
       @config["title_column"]
     end
@@ -24,9 +28,10 @@ module BlogToEvernote
 
     def convert_post_from_row(row)
       Post.new(
-        row[title_column],
-        row[body_column],
-        row[created_at_column]
+        id: row[id_column],
+        title: row[title_column],
+        body: row[body_column],
+        created_at: row[created_at_column]
       )
     end
   end
