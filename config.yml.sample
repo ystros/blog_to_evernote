@@ -11,6 +11,10 @@ database_connection:
 # General description of the blog's structure, including table and column names.
 blog_structure:
   table_name: posts
+  # Optional where clause for the table to filter results. For example, WordPress
+  # places both drafts and published posts in the same table; you may only want
+  # to import fully published posts.
+  where_clause:
   id_column: id
   title_column: title
   body_column: body

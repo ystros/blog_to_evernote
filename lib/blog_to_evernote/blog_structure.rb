@@ -27,7 +27,7 @@ module BlogToEvernote
     end
 
     def posts_query_sql
-      "SELECT * FROM #{@config["table_name"]}"
+      "SELECT * FROM #{@config["table_name"]} WHERE #{@config["where_clause"] || 1}"
     end
 
     def convert_post_from_row(row)
