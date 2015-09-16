@@ -27,18 +27,26 @@ module BlogToEvernote
 
     def create_note_from_post(post)
       our_note = convert_post_to_edam(post)
-
       begin
-       note = @client.note_store.createNote(our_note)
-       [true, post, note]
-      rescue Evernote::EDAM::Error::EDAMUserException => edue
-       ## Something was wrong with the note data
-       ## See EDAMErrorCode enumeration for error code explanation
-       ## http://dev.evernote.com/documentation/reference/Errors.html#Enum_EDAMErrorCode
-       [false, post, edue]
-      rescue Evernote::EDAM::Error::EDAMNotFoundException => ednfe
-       ## Parent Notebook GUID doesn't correspond to an actual notebook
-       [false, post, ednfe]
+        handle_rate_limit(3) do
+          note = @client.note_store.createNote(our_note)
+          [true, post, note]
+        end
+      rescue => e
+        [false, post, e]
+      end
+    end
+
+    def handle_rate_limit(retries_left, sleep_time: 1, &block)
+      begin
+        block.call
+      rescue Evernote::EDAM::Error::EDAMSystemException => e
+        if e.errorCode == Evernote::EDAM::Error::EDAMErrorCode::RATE_LIMIT_REACHED && retries_left > 0
+          sleep sleep_time
+          handle_rate_limit(retries_left - 1, &block)
+        else
+          raise
+        end
       end
     end
 
