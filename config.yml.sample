@@ -15,6 +15,9 @@ blog_structure:
   title_column: title
   body_column: body
   created_at_column: created_at
+  # The base URL that the blog lived at. Any relative URLs within posts will be
+  # prefixed by this value.
+  base_url: http://www.test.com
 
 # Evernote configuration.
 evernote:

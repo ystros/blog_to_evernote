@@ -4,10 +4,11 @@ require 'evernote_oauth'
 
 module BlogToEvernote
   class EvernoteClient
-    def initialize(evernote_config)
+    def initialize(evernote_config, sanitizer = EvernoteSanitizer.new)
       @auth_token = evernote_config['auth_token']
       @tags = evernote_config['tags'] || []
       @client = EvernoteOAuth::Client.new(token: @auth_token, consumer_key: evernote_config['key'], consumer_secret: evernote_config['secret'], sandbox: evernote_config['sandbox'])
+      @sanitizer = sanitizer
     end
 
     def request_oauth_token
@@ -44,7 +45,7 @@ module BlogToEvernote
     def convert_post_to_edam(post)
       n_body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
       n_body += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
-      n_body += "<en-note>#{post.body}</en-note>"
+      n_body += "<en-note>#{@sanitizer.sanitize(post.body)}</en-note>"
 
       ## Create note object
       our_note = Evernote::EDAM::Type::Note.new

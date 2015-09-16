@@ -22,6 +22,10 @@ module BlogToEvernote
       @config["created_at_column"]
     end
 
+    def base_url
+      @config["base_url"]
+    end
+
     def posts_query_sql
       "SELECT * FROM #{@config["table_name"]}"
     end
