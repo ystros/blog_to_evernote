@@ -23,4 +23,25 @@ describe BlogToEvernote::EvernoteSanitizer do
     expected = Nokogiri::HTML::DocumentFragment.parse("<a href=\"file:///hello\"><img src=\"file:///world\"/></a>").to_xml
     actual.must_equal expected
   end
+
+  it "converts object elements with embed sub-elements into URLs" do
+    html = <<HTML
+      <object width="560" height="340">
+        <param name="movie" value="http://www.youtube.com/v/ta-Z_psXODw&hl=en&fs=1&"></param>
+        <param name="allowFullScreen" value="true"></param>
+        <param name="allowscriptaccess" value="always"></param>
+        <embed src="http://www.youtube.com/v/ta-Z_psXODw&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="560" height="340"></embed>
+      </object>
+HTML
+    actual = @sanitizer.sanitize(html).strip
+    expected = Nokogiri::HTML::DocumentFragment.parse("<p><strong>Embed:</strong> <a href=\"http://www.youtube.com/v/ta-Z_psXODw&amp;hl=en&amp;fs=1&amp;\">http://www.youtube.com/v/ta-Z_psXODw&amp;hl=en&amp;fs=1&amp;</a></p>").to_xml
+    actual.must_equal expected
+  end
+
+  it "converts object elements with param@src sub-elements into URLs" do
+    html = '<object width="425" height="344" data="http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;" type="application/x-shockwave-flash"><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="src" value="http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;" /><param name="allowfullscreen" value="true" /></object>'
+    actual = @sanitizer.sanitize(html).strip
+    expected = Nokogiri::HTML::DocumentFragment.parse("<p><strong>Embed:</strong> <a href=\"http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;\">http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;</a></p>").to_xml
+    actual.must_equal expected
+  end
 end
