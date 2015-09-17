@@ -39,12 +39,14 @@ module BlogToEvernote
       end
     end
 
-    def handle_rate_limit(retries_left, sleep_time: 1, &block)
+    def handle_rate_limit(retries_left, &block)
       begin
         block.call
       rescue Evernote::EDAM::Error::EDAMSystemException => e
         if e.errorCode == Evernote::EDAM::Error::EDAMErrorCode::RATE_LIMIT_REACHED && retries_left > 0
-          sleep sleep_time
+          puts ""
+          puts "Currently rate limited for #{e.rateLimitDuration} seconds"
+          sleep e.rateLimitDuration + 1
           handle_rate_limit(retries_left - 1, &block)
         else
           raise
