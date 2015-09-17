@@ -22,6 +22,10 @@ blog_structure:
   # The base URL that the blog lived at. Any relative URLs within posts will be
   # prefixed by this value.
   base_url: http://www.test.com
+  # Specifies whether to automatically insert paragraph elements into posts that
+  # do not have them. Useful for importing WordPress posts where this formatting
+  # may have occurred automatically.
+  insert_paragraphs: true
 
 # Evernote configuration.
 evernote:

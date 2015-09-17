@@ -9,7 +9,7 @@ module BlogToEvernote
     def initialize(config = Config.load_file)
       @structure = config.blog_structure
       @client = create_db_client(config.database_connection)
-      @evernote = EvernoteClient.new(config.evernote, EvernoteSanitizer.new(config.blog_structure.base_url))
+      @evernote = EvernoteClient.new(config.evernote, EvernoteSanitizer.new(config.blog_structure.base_url, config.blog_structure.insert_paragraphs))
     end
 
     def import

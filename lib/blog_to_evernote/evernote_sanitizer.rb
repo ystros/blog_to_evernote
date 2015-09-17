@@ -13,21 +13,22 @@ module BlogToEvernote
 
     PROHIBITED_HTML_ATTRIBUTES = [
       'id', 'class', 'onclick', 'ondblclick', 'accesskey', 'data', 'dynsrc',
-      'tabindex'
+      'tabindex', 'name'
     ]
 
     URL_ATTRIBUTES = [
       'href', 'src'
     ]
 
-    def initialize(base_url = "file://")
-      @base_url = base_url
+    def initialize(base_url = "file://", insert_paragraphs = false)
+      @base_url, @insert_paragraphs = base_url, insert_paragraphs
     end
 
     # Removes prohibited HTML elements and attributes and converts the result to
     # XML that will be accepted by Evernote.
     def sanitize(text)
-      document = Nokogiri::HTML.parse(text)
+      html = insert_missing_paragraphs(text)
+      document = Nokogiri::HTML.parse(html)
       convert_embeds(document)
       sanitize_elements(document)
       sanitize_attributes(document)
@@ -36,6 +37,15 @@ module BlogToEvernote
     end
 
     private
+    def insert_missing_paragraphs(text)
+      return text unless @insert_paragraphs && !text.include?("</p>")
+      text.
+        gsub("\r", "").
+        split(/\n{2,}/).
+        map { |p| "<p>" + p.gsub("\n", "<br/>") + "</p>" }.
+        join("")
+    end
+
     # Evernote does not allow object elements in notes. To preserve embedded
     # videos within blog posts (e.g. YouTube), these embeds should be replaced
     # with a link to the embedded media.

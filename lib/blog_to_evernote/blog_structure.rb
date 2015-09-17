@@ -26,6 +26,10 @@ module BlogToEvernote
       @config["base_url"]
     end
 
+    def insert_paragraphs
+      !!@config["insert_paragraphs"]
+    end
+
     def posts_query_sql
       "SELECT * FROM #{@config["table_name"]} WHERE #{@config["where_clause"] || 1}"
     end

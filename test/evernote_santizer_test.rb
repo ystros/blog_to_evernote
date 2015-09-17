@@ -44,4 +44,11 @@ HTML
     expected = Nokogiri::HTML::DocumentFragment.parse("<p><strong>Embed:</strong> <a href=\"http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;\">http://www.youtube.com/v/-Psfn6iOfS8&amp;hl=en&amp;fs=1&amp;</a></p>").to_xml
     actual.must_equal expected
   end
+
+  it "inserts paragraphs when desired" do
+    sanitizer = BlogToEvernote::EvernoteSanitizer.new("file://", true)
+    html = "The quick brown fox\njumps over\n\nthe lazy dog"
+    expected = Nokogiri::HTML.fragment("<p>The quick brown fox<br/>jumps over</p><p>the lazy dog</p>").to_xml
+    sanitizer.sanitize(html).must_equal expected
+  end
 end
