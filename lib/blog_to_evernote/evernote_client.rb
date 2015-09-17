@@ -14,7 +14,7 @@ module BlogToEvernote
     def request_oauth_token
       return if @auth_token
       callback_url = "http://ystros.com"
-      request_token = evernote.request_token(:oauth_callback => callback_url)
+      request_token = @client.request_token(:oauth_callback => callback_url)
       puts "Go to this URL:"
       puts request_token.authorize_url
       puts "Once you've authorized the app, paste in the URL you were redirected to:"
@@ -23,6 +23,8 @@ module BlogToEvernote
       access_token = request_token.get_access_token(oauth_verifier: callback_params['oauth_verifier'][0])
       puts "Please save the following to your config under evernote as auth_token: #{access_token.token}"
       @auth_token = access_token.token
+      puts "Once you've done this, rerun `rake run`"
+      exit
     end
 
     def create_note_from_post(post)
